@@ -131,11 +131,38 @@ BLOCK;
      *
      * @return string
      */
-    protected function getTargetsBlock($targets)
+    protected function getTargetsBlock(array $targets)
     {
-        // googletag.target('', '');
-        $target = '';
+        $block = '';
         
-        return $target;
+        foreach ($this->settings->getTargets() as $name => $target) {
+            if (!array_key_exists($name, $targets)) {
+                $targets[$name] = $target;
+            }
+        }
+        
+        
+        foreach ($targets as $name => $target) {
+            if ($target === null || $target === '') {
+                continue;
+            }
+            
+            if (is_array($target)) {
+                $values = array_values($target);
+                $target = '';
+                foreach ($values as $value) {
+                    $target .= "'$value',";
+                }
+                
+                $target = trim($target, ',');
+
+            } else {
+                $target = "'$target'";
+            }
+
+            $block .= "\ngoogletag.target('$name', [$target]);";
+        }
+
+        return $block;
     }
 }

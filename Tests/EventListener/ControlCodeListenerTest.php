@@ -158,4 +158,271 @@ RESPONSE;
 
         $this->assertSame($result, trim($this->response->getContent()));
     }
+
+
+    /**
+     * @covers Nodrew\Bundle\DfpBundle\EventListener\ControlCodeListener::onKernelResponse
+     */
+    public function testResponseEventWillPrintTargetsIntoAdUnit()
+    {
+        $content  = '<!-- NodrewDfpBundle Control Code -->';
+        $result   = <<< RESPONSE
+<script type="text/javascript">
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+(function() {
+var gads = document.createElement('script');
+gads.async = true;
+gads.type = 'text/javascript';
+var useSSL = 'https:' == document.location.protocol;
+gads.src = (useSSL ? 'https:' : 'http:') +
+'//www.googletagservices.com/tag/js/gpt.js';
+var node = document.getElementsByTagName('script')[0];
+node.parentNode.insertBefore(gads, node);
+})();
+</script>
+
+<script type="text/javascript">
+googletag.cmd.push(function() {
+googletag.defineSlot('/0000/path/path', [300, 255], 'divId').addService(googletag.pubads());
+googletag.pubads().enableSingleRequest();
+googletag.enableServices();
+googletag.target('SSS', ['blue']);
+});
+</script>
+RESPONSE;
+
+        $this->collection->add($unit = new AdUnit('path/path', 300, 255));
+        $unit->setDivId('divId');
+        $unit->addTarget('SSS', 'blue');
+
+        $this->listener->onKernelResponse($this->event($content));
+
+        $this->assertSame($result, trim($this->response->getContent()));
+    }
+
+    /**
+     * @covers Nodrew\Bundle\DfpBundle\EventListener\ControlCodeListener::onKernelResponse
+     */
+    public function testResponseEventWillPrintMultipleTargetsIntoAdUnit()
+    {
+        $content  = '<!-- NodrewDfpBundle Control Code -->';
+        $result   = <<< RESPONSE
+<script type="text/javascript">
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+(function() {
+var gads = document.createElement('script');
+gads.async = true;
+gads.type = 'text/javascript';
+var useSSL = 'https:' == document.location.protocol;
+gads.src = (useSSL ? 'https:' : 'http:') +
+'//www.googletagservices.com/tag/js/gpt.js';
+var node = document.getElementsByTagName('script')[0];
+node.parentNode.insertBefore(gads, node);
+})();
+</script>
+
+<script type="text/javascript">
+googletag.cmd.push(function() {
+googletag.defineSlot('/0000/path/path', [300, 255], 'divId').addService(googletag.pubads());
+googletag.pubads().enableSingleRequest();
+googletag.enableServices();
+googletag.target('SSS', ['blue']);
+googletag.target('TTT', ['green']);
+});
+</script>
+RESPONSE;
+
+        $this->collection->add($unit = new AdUnit('path/path', 300, 255));
+        $unit->setDivId('divId');
+        $unit->addTarget('SSS', 'blue');
+        $unit->addTarget('TTT', 'green');
+
+        $this->listener->onKernelResponse($this->event($content));
+
+        $this->assertSame($result, trim($this->response->getContent()));
+    }
+
+    /**
+     * @covers Nodrew\Bundle\DfpBundle\EventListener\ControlCodeListener::onKernelResponse
+     */
+    public function testResponseEventWillPrintTargetFromSettings()
+    {
+        $content  = '<!-- NodrewDfpBundle Control Code -->';
+        $result   = <<< RESPONSE
+<script type="text/javascript">
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+(function() {
+var gads = document.createElement('script');
+gads.async = true;
+gads.type = 'text/javascript';
+var useSSL = 'https:' == document.location.protocol;
+gads.src = (useSSL ? 'https:' : 'http:') +
+'//www.googletagservices.com/tag/js/gpt.js';
+var node = document.getElementsByTagName('script')[0];
+node.parentNode.insertBefore(gads, node);
+})();
+</script>
+
+<script type="text/javascript">
+googletag.cmd.push(function() {
+googletag.defineSlot('/0000/path/path', [300, 255], 'divId').addService(googletag.pubads());
+googletag.pubads().enableSingleRequest();
+googletag.enableServices();
+googletag.target('SSS', ['blue']);
+});
+</script>
+RESPONSE;
+
+        $this->collection->add($unit = new AdUnit('path/path', 300, 255));
+        $unit->setDivId('divId');
+        $this->settings->addTarget('SSS', 'blue');
+
+        $this->listener->onKernelResponse($this->event($content));
+
+        $this->assertSame($result, trim($this->response->getContent()));
+    }
+
+    /**
+     * @covers Nodrew\Bundle\DfpBundle\EventListener\ControlCodeListener::onKernelResponse
+     */
+    public function testResponseEventWillPrintTargetFromSettingsAndMergeWithAdUnit()
+    {
+        $content  = '<!-- NodrewDfpBundle Control Code -->';
+        $result   = <<< RESPONSE
+<script type="text/javascript">
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+(function() {
+var gads = document.createElement('script');
+gads.async = true;
+gads.type = 'text/javascript';
+var useSSL = 'https:' == document.location.protocol;
+gads.src = (useSSL ? 'https:' : 'http:') +
+'//www.googletagservices.com/tag/js/gpt.js';
+var node = document.getElementsByTagName('script')[0];
+node.parentNode.insertBefore(gads, node);
+})();
+</script>
+
+<script type="text/javascript">
+googletag.cmd.push(function() {
+googletag.defineSlot('/0000/path/path', [300, 255], 'divId').addService(googletag.pubads());
+googletag.pubads().enableSingleRequest();
+googletag.enableServices();
+googletag.target('TTT', ['green']);
+googletag.target('SSS', ['blue']);
+});
+</script>
+RESPONSE;
+
+        $this->collection->add($unit = new AdUnit('path/path', 300, 255));
+        $unit->setDivId('divId');
+        $this->settings->addTarget('SSS', 'blue');
+        $unit->addTarget('TTT', 'green');
+
+        $this->listener->onKernelResponse($this->event($content));
+
+        $this->assertSame($result, trim($this->response->getContent()));
+    }
+
+    /**
+     * @covers Nodrew\Bundle\DfpBundle\EventListener\ControlCodeListener::onKernelResponse
+     */
+    public function testResponseEventWillPrintTargetFromSettingsAndMergeWithMultipleAdUnits()
+    {
+        $content  = '<!-- NodrewDfpBundle Control Code -->';
+        $result   = <<< RESPONSE
+<script type="text/javascript">
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+(function() {
+var gads = document.createElement('script');
+gads.async = true;
+gads.type = 'text/javascript';
+var useSSL = 'https:' == document.location.protocol;
+gads.src = (useSSL ? 'https:' : 'http:') +
+'//www.googletagservices.com/tag/js/gpt.js';
+var node = document.getElementsByTagName('script')[0];
+node.parentNode.insertBefore(gads, node);
+})();
+</script>
+
+<script type="text/javascript">
+googletag.cmd.push(function() {
+googletag.defineSlot('/0000/path/path', [300, 255], 'divId1').addService(googletag.pubads());
+googletag.pubads().enableSingleRequest();
+googletag.enableServices();
+googletag.target('TTT', ['green']);
+googletag.target('SSS', ['blue']);
+});
+</script>
+
+<script type="text/javascript">
+googletag.cmd.push(function() {
+googletag.defineSlot('/0000/path/path2', [400, 355], 'divId2').addService(googletag.pubads());
+googletag.pubads().enableSingleRequest();
+googletag.enableServices();
+googletag.target('WWW', ['red']);
+googletag.target('SSS', ['blue']);
+});
+</script>
+RESPONSE;
+
+        $this->collection->add($unit1 = new AdUnit('path/path', 300, 255));
+        $this->collection->add($unit2 = new AdUnit('path/path2', 400, 355));
+        $unit1->setDivId('divId1');
+        $unit2->setDivId('divId2');
+
+        $this->settings->addTarget('SSS', 'blue');
+        $unit1->addTarget('TTT', 'green');
+        $unit2->addTarget('WWW', 'red');
+
+        $this->listener->onKernelResponse($this->event($content));
+
+        $this->assertSame($result, trim($this->response->getContent()));
+    }
+
+    /**
+     * @covers Nodrew\Bundle\DfpBundle\EventListener\ControlCodeListener::onKernelResponse
+     */
+    public function testResponseEventWillPrintTargetArrayIntoAdUnit()
+    {
+        $content  = '<!-- NodrewDfpBundle Control Code -->';
+        $result   = <<< RESPONSE
+<script type="text/javascript">
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+(function() {
+var gads = document.createElement('script');
+gads.async = true;
+gads.type = 'text/javascript';
+var useSSL = 'https:' == document.location.protocol;
+gads.src = (useSSL ? 'https:' : 'http:') +
+'//www.googletagservices.com/tag/js/gpt.js';
+var node = document.getElementsByTagName('script')[0];
+node.parentNode.insertBefore(gads, node);
+})();
+</script>
+
+<script type="text/javascript">
+googletag.cmd.push(function() {
+googletag.defineSlot('/0000/path/path', [300, 255], 'divId').addService(googletag.pubads());
+googletag.pubads().enableSingleRequest();
+googletag.enableServices();
+googletag.target('SSS', ['blue','green']);
+});
+</script>
+RESPONSE;
+
+        $this->collection->add($unit = new AdUnit('path/path', 300, 255));
+        $unit->setDivId('divId');
+        $unit->addTarget('SSS', array('blue', 'green'));
+
+        $this->listener->onKernelResponse($this->event($content));
+
+        $this->assertSame($result, trim($this->response->getContent()));
+    }
 }
