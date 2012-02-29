@@ -4,6 +4,7 @@ namespace Nodrew\Bundle\DfpBundle\Tests\EventListener;
 
 use Nodrew\Bundle\DfpBundle\EventListener\ControlCodeListener,
     Symfony\Component\HttpFoundation\Response,
+    Nodrew\Bundle\DfpBundle\Model\Settings,
     Nodrew\Bundle\DfpBundle\Model\Collection;
 
 class ControlCodeListenerTest extends \PHPUnit_Framework_TestCase
@@ -17,7 +18,7 @@ class ControlCodeListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Nodrew\Bundle\ExceptionalBundle\EventListener\ControlCodeListener::onKernelResponse
+     * @covers Nodrew\Bundle\DfpBundle\EventListener\ControlCodeListener::onKernelResponse
      */
     public function testResponseEventWillNotModifyContentIfNoPlaceholder()
     {
@@ -28,14 +29,14 @@ class ControlCodeListenerTest extends \PHPUnit_Framework_TestCase
              ->method('getResponse')
              ->will($this->returnValue($response));        
 
-        $listener = new ControlCodeListener(new Collection, '0000');
+        $listener = new ControlCodeListener(new Collection, new Settings('0000'));
         $listener->onKernelResponse($this->event);
 
         $this->assertSame($content, $response->getContent());
     }
 
     /**
-     * @covers Nodrew\Bundle\ExceptionalBundle\EventListener\ControlCodeListener::onKernelResponse
+     * @covers Nodrew\Bundle\DfpBundle\EventListener\ControlCodeListener::onKernelResponse
      */
     public function testResponseEventWillRemovePlaceHolderIfCollectionIsEmpty()
     {
@@ -47,7 +48,7 @@ class ControlCodeListenerTest extends \PHPUnit_Framework_TestCase
              ->method('getResponse')
              ->will($this->returnValue($response));        
 
-        $listener = new ControlCodeListener(new Collection, '0000');
+        $listener = new ControlCodeListener(new Collection, new Settings('0000'));
         $listener->onKernelResponse($this->event);
 
         $this->assertSame($result, $response->getContent());

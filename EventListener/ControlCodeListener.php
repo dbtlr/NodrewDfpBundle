@@ -7,6 +7,7 @@
 namespace Nodrew\Bundle\DfpBundle\EventListener;
 
 use Nodrew\Bundle\DfpBundle\Model\Collection,
+    Nodrew\Bundle\DfpBundle\Model\Settings,
     Symfony\Component\HttpKernel\Event\FilterResponseEvent,
     Symfony\Component\HttpFoundation\Response;
 
@@ -29,23 +30,21 @@ class ControlCodeListener
     protected $collection;
 
     /**
-     * The Google DFP Api Key
-     *
-     * @var string
+     * @var Nodrew\Bundle\DfpBundle\Model\Settings
      */
-    protected $publisherId;
+    protected $settings;
 
 
     /**
      * Constructor.
      *
      * @param Nodrew\Bundle\DfpBundle\Model\Collection $collection
-     * @param strign $apiKey
+     * @param Nodrew\Bundle\DfpBundle\Model\Settings $settings
      */
-    public function __construct(Collection $collection, $publisherId)
+    public function __construct(Collection $collection, Settings $settings)
     {
-        $this->publisherId = $publisherId;
-        $this->collection  = $collection;
+        $this->settings   = $settings;
+        $this->collection = $collection;
     }
 
     /**
@@ -100,12 +99,14 @@ CONTROL;
     
     protected function getControlBlock()
     {
-        $targets = '';
+        $publishedId = $this->settings->getPublisherId();
+        $targets     = '';
+
         // googletag.target('', '');
         return <<< BLOCK
 <script type='text/javascript'>
 googletag.cmd.push(function() {
-googletag.defineSlot('/7247/stylecaster/community/profile', [300, 250], '{$this->publisherId}').addService(googletag.pubads());
+googletag.defineSlot('/7247/stylecaster/community/profile', [300, 250], '{$publisherId}').addService(googletag.pubads());
 googletag.pubads().enableSingleRequest();
 googletag.enableServices();{$targets}
 });

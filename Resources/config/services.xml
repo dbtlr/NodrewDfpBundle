@@ -6,17 +6,24 @@
 
     <parameters>
         <parameter key="nodrew.dfp.publisher_id"></parameter>
+        <parameter key="nodrew.dfp.targets"  type="collection"></parameter>
         <parameter key="nodrew.dfp.control.listener.class">Nodrew\Bundle\DfpBundle\EventListener\ControlCodeListener</parameter>
         <parameter key="nodrew.dfp.collection.class">Nodrew\Bundle\DfpBundle\Model\Collection</parameter>
+        <parameter key="nodrew.dfp.settings.class">Nodrew\Bundle\DfpBundle\Model\Settings</parameter>
     </parameters>
 
     <services>
         <service id="nodrew.dfp.collection" class="%nodrew.dfp.collection.class%" />
 
+        <service id="nodrew.dfp.settings" class="%nodrew.dfp.settings.class%">
+            <argument>%nodrew.dfp.publisher_id%</argument>
+            <argument>%nodrew.dfp.targets%</argument>
+        </service>
+
         <service id="nodrew.dfp.control.listener" class="%nodrew.dfp.control.listener.class%">
             <tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" />
             <argument type="service" id="nodrew.dfp.collection" />
-            <argument>%nodrew.dfp.publisher_id%</argument>
+            <argument type="service" id="nodrew.dfp.settings" />
         </service>
     </services>
 </container>

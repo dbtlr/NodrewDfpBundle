@@ -29,6 +29,7 @@ class Configuration
         $rootNode
             ->children()
                 ->scalarNode('publisher_id')->isRequired()->cannotBeEmpty()->end()
+                ->variableNode('targets')->end()
             ->end()
         ;
 

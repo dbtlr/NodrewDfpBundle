@@ -2,7 +2,8 @@
 
 namespace Nodrew\Bundle\DfpBundle\Tests\DependencyInjection;
 
-use Nodrew\Bundle\DfpBundle\DependencyInjection\NodrewDfpExtension;
+use Nodrew\Bundle\DfpBundle\DependencyInjection\NodrewDfpExtension,
+    Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class NodrewDfpExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,22 +27,7 @@ class NodrewDfpExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testWillLoadWithOnlyPublisherId()
     {
-        $container = $this->getMockBuilder('Symfony\\Component\\DependencyInjection\\ContainerBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $parameterBag = $this->getMockBuilder('Symfony\\Component\\DependencyInjection\\ParameterBag\\ParameterBag')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $parameterBag
-            ->expects($this->any())
-            ->method('add');
-
-        $container
-            ->expects($this->any())
-            ->method('getParameterBag')
-            ->will($this->returnValue($parameterBag));
+        $container = new ContainerBuilder();
 
         $configs = array(
             array('publisher_id' => 'asdasd'),
@@ -49,26 +35,57 @@ class NodrewDfpExtensionTest extends \PHPUnit_Framework_TestCase
 
         $extension = new NodrewDfpExtension();
         $extension->load($configs, $container);
+
+        $this->assertSame('asdasd', $container->getParameter('nodrew.dfp.publisher_id'));
+    }
+
+    /**
+     * @expectedException Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @covers Nodrew\Bundle\DfpBundle\DependencyInjection\NodrewDfpExtension:load
+     */
+    public function testWillExplodeWithoutKey()
+    {
+        $container = new ContainerBuilder;
+
+        $configs = array();
+        $extension = new NodrewDfpExtension();
+        $extension->load($configs, $container);
     }
 
     /**
      * @covers Nodrew\Bundle\DfpBundle\DependencyInjection\NodrewDfpExtension:load
      */
-    public function testWillExplodeWithoutKey()
+    public function testWillSetTargetsArray()
     {
-        $this->setExpectedException('Symfony\\Component\\Config\\Definition\\Exception\\InvalidConfigurationException');
+        $container = new ContainerBuilder();
 
-        $container = $this->getMockBuilder('Symfony\\Component\\DependencyInjection\\ContainerBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $configs = array(
+            array('publisher_id' => 'asdasd'),
+            array('targets'      => array('name1' => 'value1')),
+        );
 
-        $parameterBag = $this->getMockBuilder('Symfony\\Component\\DependencyInjection\\ParameterBag\\ParameterBag')
-            ->disableOriginalConstructor()
-            ->getMock();
-        
-        
-        $configs = array();
         $extension = new NodrewDfpExtension();
         $extension->load($configs, $container);
-    }    
+
+        $this->assertSame(array('name1' => 'value1'), $container->getParameter('nodrew.dfp.targets'));
+    }
+
+    /**
+     * @expectedException Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @covers Nodrew\Bundle\DfpBundle\DependencyInjection\NodrewDfpExtension:load
+     */
+    public function testWillExplodeIfTargetIsNotAnArray()
+    {
+        $container = new ContainerBuilder();
+
+        $configs = array(
+            array('publisher_id' => 'asdasd'),
+            array('targets'      => 'not an array'),
+        );
+
+        $extension = new NodrewDfpExtension();
+        $extension->load($configs, $container);
+
+        $this->assertSame(array('name1' => 'value1'), $container->getParameter('nodrew.dfp.targets'));
+    }
 }

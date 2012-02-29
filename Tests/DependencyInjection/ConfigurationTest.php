@@ -8,7 +8,7 @@ use Nodrew\Bundle\DfpBundle\DependencyInjection\Configuration;
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @covers Nodrew\Bundle\ExceptionalBundle\DependencyInjection\Configuration::getConfigTree
+     * @covers Nodrew\Bundle\DfpBundle\DependencyInjection\Configuration::getConfigTree
      */
     public function testThatCanGetConfigTree()
     {

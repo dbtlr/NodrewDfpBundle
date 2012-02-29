@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -38,6 +39,8 @@ class NodrewDfpExtension extends Extension
 
         $config = $processor->process($configuration->getConfigTree(), $configs);
         $loader->load('services.xml');
+        
+        $this->setConfig($config, $container);
     }
 
     /**
@@ -48,8 +51,17 @@ class NodrewDfpExtension extends Extension
      */
     protected function setConfig($config, $container)
     {
-        foreach (array('publisher_id') as $attribute) {
+        foreach (array('publisher_id', 'targets') as $attribute) {
             if (isset($config[$attribute])) {
+                if ($attribute == 'targets') {
+                    if (!is_array($config[$attribute])) {
+                        $ex = new InvalidConfigurationException('Configuration for nodrew_dfp.targets must be an array.');
+                        $ex->setPath('nodrew_dfp.targets');
+
+                        throw $ex;
+                    }
+                }
+
                 $container->setParameter('nodrew.dfp.'.$attribute, $config[$attribute]);
             }
         }
