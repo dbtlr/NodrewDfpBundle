@@ -97,21 +97,42 @@ node.parentNode.insertBefore(gads, node);
 CONTROL;
     }
     
-    protected function getControlBlock()
+    /**
+     * Get the control block for an individual ad.
+     *
+     * @return string
+     */
+    protected function getAdControlBlock(AdUnit $unit)
     {
         $publishedId = $this->settings->getPublisherId();
-        $targets     = '';
+        $targets     = $this->getTargetsBlock($unit->getTargets());
+        $width       = $unit->getWidth();
+        $height      = $unit->getHeight();
+        $divId       = $unit->getDivId();
+        $path        = $unit->getPath();
 
-        // googletag.target('', '');
         return <<< BLOCK
 <script type='text/javascript'>
 googletag.cmd.push(function() {
-googletag.defineSlot('/7247/stylecaster/community/profile', [300, 250], '{$publisherId}').addService(googletag.pubads());
+googletag.defineSlot('/{$publisherId}/{$path}', [{$width}, {$height}], '{$divId}').addService(googletag.pubads());
 googletag.pubads().enableSingleRequest();
 googletag.enableServices();{$targets}
 });
 </script>
         
 BLOCK;
+    }
+    
+    /**
+     * Get the targets block
+     *
+     * @return string
+     */
+    protected function getTargetsBlock($targets)
+    {
+        // googletag.target('', '');
+        $target = '';
+        
+        return $target;
     }
 }

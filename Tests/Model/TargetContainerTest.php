@@ -2,15 +2,15 @@
 
 namespace Nodrew\Bundle\DfpBundle\Tests\Model;
 
-use Nodrew\Bundle\DfpBundle\Model\Settings;
+use Nodrew\Bundle\DfpBundle\Model\TargetContainer;
 
-class SettingsTest extends \PHPUnit_Framework_TestCase
+class TargetContainerTest extends \PHPUnit_Framework_TestCase
 {
     protected $settings;
 
     protected function setUp()
     {
-        $this->settings = new Settings('0000');
+        $this->settings = new Settings();
     }
 
     /**
@@ -113,3 +113,5 @@ class SettingsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('name1' => 'value1', 'name2' => 'value22', 'name3' => 'value3'), $this->settings->getTargets());
     }
 }
+
+class Settings extends TargetContainer {}
