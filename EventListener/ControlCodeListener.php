@@ -8,6 +8,7 @@ namespace Nodrew\Bundle\DfpBundle\EventListener;
 
 use Nodrew\Bundle\DfpBundle\Model\Collection,
     Nodrew\Bundle\DfpBundle\Model\Settings,
+    Nodrew\Bundle\DfpBundle\Model\AdUnit,
     Symfony\Component\HttpKernel\Event\FilterResponseEvent,
     Symfony\Component\HttpFoundation\Response;
 
@@ -62,7 +63,7 @@ class ControlCodeListener
             $controlCode .= $this->getMainControlCode();
             
             foreach ($this->collection as $unit) {
-                
+                $controlCode .= $this->getAdControlBlock($unit);
             }
         }
 
@@ -79,7 +80,8 @@ class ControlCodeListener
     protected function getMainControlCode()
     {
         return <<< CONTROL
-<script type='text/javascript'>
+
+<script type="text/javascript">
 var googletag = googletag || {};
 googletag.cmd = googletag.cmd || [];
 (function() {
@@ -104,7 +106,7 @@ CONTROL;
      */
     protected function getAdControlBlock(AdUnit $unit)
     {
-        $publishedId = $this->settings->getPublisherId();
+        $publisherId = $this->settings->getPublisherId();
         $targets     = $this->getTargetsBlock($unit->getTargets());
         $width       = $unit->getWidth();
         $height      = $unit->getHeight();
@@ -112,14 +114,15 @@ CONTROL;
         $path        = $unit->getPath();
 
         return <<< BLOCK
-<script type='text/javascript'>
+
+<script type="text/javascript">
 googletag.cmd.push(function() {
 googletag.defineSlot('/{$publisherId}/{$path}', [{$width}, {$height}], '{$divId}').addService(googletag.pubads());
 googletag.pubads().enableSingleRequest();
 googletag.enableServices();{$targets}
 });
 </script>
-        
+
 BLOCK;
     }
     
