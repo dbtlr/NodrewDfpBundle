@@ -28,7 +28,7 @@ class Configuration
 
         $rootNode
             ->children()
-                ->scalarNode('api_key')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('publisher_id')->isRequired()->cannotBeEmpty()->end()
             ->end()
         ;
 

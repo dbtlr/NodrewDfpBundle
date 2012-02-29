@@ -24,7 +24,7 @@ class NodrewDfpExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Nodrew\Bundle\DfpBundle\DependencyInjection\NodrewDfpExtension:load
      */
-    public function testWillLoadWithOnlyKey()
+    public function testWillLoadWithOnlyPublisherId()
     {
         $container = $this->getMockBuilder('Symfony\\Component\\DependencyInjection\\ContainerBuilder')
             ->disableOriginalConstructor()
@@ -44,7 +44,7 @@ class NodrewDfpExtensionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($parameterBag));
 
         $configs = array(
-            array('api_key' => 'asdasd'),
+            array('publisher_id' => 'asdasd'),
         );
 
         $extension = new NodrewDfpExtension();

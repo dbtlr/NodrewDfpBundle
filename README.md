@@ -8,7 +8,7 @@ Google DFP Bundle for Symfony2 [![Travis-CI Build Status](https://secure.travis-
 1. Download NodrewDfpBundle
 2. Configure the Autoloader
 3. Enable the Bundle
-4. Add your Google DFP API key
+4. Add your Google DFP Publisher Id
 
 ### Step 1: Download NodrewDfpBundle
 
@@ -46,7 +46,6 @@ $ git submodule update --init
 ### Step 2: Configure the Autoloader
 
 ``` php
-<?php
 // app/autoload.php
 
 $loader = new UniversalClassLoader();
@@ -61,7 +60,6 @@ $loader->registerNamespaces(array(
 Finally, enable the bundle in the kernel:
 
 ``` php
-<?php
 // app/AppKernel.php
 
 public function registerBundles()
@@ -73,11 +71,23 @@ public function registerBundles()
 }
 ```
 
-### Step 4: Add your Google DFP API Key
+### Step 4: Add your Google DFP Publisher Id
 
 ``` yaml
 # app/config/config.yml
 nodrew_dfp:
-    api_key:   [your api key]
+    publisher_id:   [publisher_id]
+```
+
+### Step 5: Add Control Code Placeholder to layout
+
+This placeholder comment needs to be added to the head of your layout. It is automatically replaced with the proper Google DFP code, when ads are used on the given page.
+
+``` html
+// app/views/base.html.twig
+<head>
+    ...
+    <!-- NodrewDfpBundle Control Code -->
+</head>
 ```
 

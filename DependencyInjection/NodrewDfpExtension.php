@@ -48,7 +48,7 @@ class NodrewDfpExtension extends Extension
      */
     protected function setConfig($config, $container)
     {
-        foreach (array('api_key') as $attribute) {
+        foreach (array('publisher_id') as $attribute) {
             if (isset($config[$attribute])) {
                 $container->setParameter('nodrew.dfp.'.$attribute, $config[$attribute]);
             }
