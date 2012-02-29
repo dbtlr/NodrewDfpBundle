@@ -10,6 +10,7 @@
         <parameter key="nodrew.dfp.control.listener.class">Nodrew\Bundle\DfpBundle\EventListener\ControlCodeListener</parameter>
         <parameter key="nodrew.dfp.collection.class">Nodrew\Bundle\DfpBundle\Model\Collection</parameter>
         <parameter key="nodrew.dfp.settings.class">Nodrew\Bundle\DfpBundle\Model\Settings</parameter>
+        <parameter key="nodrew.dfp.twig.extension.class">Nodrew\Bundle\DfpBundle\Twig\Extension\DfpExtension</parameter>
     </parameters>
 
     <services>
@@ -24,6 +25,13 @@
             <tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" />
             <argument type="service" id="nodrew.dfp.collection" />
             <argument type="service" id="nodrew.dfp.settings" />
+        </service>
+        
+
+        <service id="nodrew.dfp.twig.extension" class="%nodrew.dfp.twig.extension.class%">
+            <argument type="service" id="nodrew.dfp.settings" />
+            <argument type="service" id="nodrew.dfp.collection" />
+            <tag name="twig.extension" />
         </service>
     </services>
 </container>
