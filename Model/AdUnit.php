@@ -24,12 +24,41 @@ class AdUnit extends TargetContainer
      * @param string $path
      * @param int $width
      * @param int $height
+     * @param array $targets
      */
-    public function __construct($path, $width, $height)
+    public function __construct($path, $width, $height, array $targets = array())
     {
         $this->setPath($path);
         $this->setWidth($width);
         $this->setHeight($height);
+        $this->setTargets($targets);
+        
+        $this->buildDivId();
+    }
+    
+    /**
+     * Build the divId.
+     */
+    public function buildDivId()
+    {
+        $this->divId = 'dfp-'.spl_object_hash($this);
+    }
+    
+    /**
+     * Output the DFP code for this ad unit
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return <<< RETURN
+
+<div id="{$this->divId}" style="width:{$this->width}px; height:{$this->height}px;">
+<script type="text/javascript">
+googletag.cmd.push(function() { googletag.display('{$this->divId}'); });
+</script>
+</div>
+RETURN;
     }
 
     /**
