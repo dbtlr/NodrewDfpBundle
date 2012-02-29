@@ -1,0 +1,69 @@
+<?php
+
+namespace Nodrew\Bundle\DfpBundle\DependencyInjection;
+
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
+
+/**
+ * This is the class that loads and manages your bundle configuration
+ *
+ * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
+ *
+ * @package     NodrewDfpBundle
+ * @author      Drew Butler <hi@nodrew.com>
+ * @copyright	(c) 2012 Drew Butler
+ * @license     http://www.opensource.org/licenses/mit-license.php
+ */
+class NodrewDfpExtension extends Extension
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function load(array $configs, ContainerBuilder $container)
+    {
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+
+        $processor     = new Processor();
+        $configuration = new Configuration();
+
+        $config = $processor->process($configuration->getConfigTree(), $configs);
+        $loader->load('services.xml');
+    }
+
+    /**
+     * Set the config options.
+     *
+     * @param array $config
+     * @param Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    protected function setConfig($config, $container)
+    {
+        foreach (array('api_key') as $attribute) {
+            if (isset($config[$attribute])) {
+                $container->setParameter('nodrew.dfp.'.$attribute, $config[$attribute]);
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getXsdValidationBasePath()
+    {
+        return __DIR__.'/../Resources/config/schema';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getNamespace()
+    {
+        return 'http://www.nodrew.com/schema/dic/dfp_bundle';
+    }
+}
