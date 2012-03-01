@@ -51,7 +51,7 @@ class NodrewDfpExtension extends Extension
      */
     protected function setConfig($config, $container)
     {
-        foreach (array('publisher_id', 'targets') as $attribute) {
+        foreach (array('publisher_id', 'targets', 'div_class') as $attribute) {
             if (isset($config[$attribute])) {
                 if ($attribute == 'targets') {
                     if (!is_array($config[$attribute])) {

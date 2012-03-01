@@ -19,7 +19,7 @@ class ControlCodeListenerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->collection = new Collection;
-        $this->settings   = new Settings('0000');
+        $this->settings   = new Settings('0000', 'class');
         $this->listener   = new ControlCodeListener($this->collection, $this->settings);
     }
 

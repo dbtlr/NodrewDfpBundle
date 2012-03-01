@@ -29,6 +29,7 @@ class Configuration
         $rootNode
             ->children()
                 ->scalarNode('publisher_id')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('div_class')->defaultValue('dfp-ad-unit')->end()
                 ->variableNode('targets')->end()
             ->end()
         ;

@@ -15,7 +15,7 @@ class DfpExtensionTest extends \PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $this->settings   = new Settings('0000');
+        $this->settings   = new Settings('0000', 'class');
         $this->collection = new Collection;
         $this->extension  = new DfpExtension($this->settings, $this->collection);
     }

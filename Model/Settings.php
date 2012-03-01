@@ -15,14 +15,17 @@ namespace Nodrew\Bundle\DfpBundle\Model;
 class Settings extends TargetContainer
 {
     protected $publisherId;
+    protected $divClass;
 
     /**
      * @param int $publisherId
+     * @param int $divClass
      * @param array $targets
      */
-    public function __construct($publisherId, array $targets = array())
+    public function __construct($publisherId, $divClass, array $targets = array())
     {
         $this->setPublisherId($publisherId);
+        $this->setDivClass($divClass);
         $this->setTargets($targets);
     }
 
@@ -44,5 +47,25 @@ class Settings extends TargetContainer
     public function setPublisherId($publisherId)
     {
         $this->publisherId = $publisherId;
+    }
+
+    /**
+     * Get the divClass.
+     *
+     * @return string
+     */
+    public function getDivClass()
+    {
+        return $this->divClass;
+    }
+
+    /**
+     * Set the divClass.
+     *
+     * @param string divClass
+     */
+    public function setDivClass($divClass)
+    {
+        $this->divClass = $divClass;
     }
 }

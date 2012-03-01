@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="nodrew.dfp.publisher_id"></parameter>
+        <parameter key="nodrew.dfp.div_class"></parameter>
         <parameter key="nodrew.dfp.targets"  type="collection"></parameter>
         <parameter key="nodrew.dfp.control.listener.class">Nodrew\Bundle\DfpBundle\EventListener\ControlCodeListener</parameter>
         <parameter key="nodrew.dfp.collection.class">Nodrew\Bundle\DfpBundle\Model\Collection</parameter>
@@ -18,6 +19,7 @@
 
         <service id="nodrew.dfp.settings" class="%nodrew.dfp.settings.class%">
             <argument>%nodrew.dfp.publisher_id%</argument>
+            <argument>%nodrew.dfp.div_class%</argument>
             <argument>%nodrew.dfp.targets%</argument>
         </service>
 
