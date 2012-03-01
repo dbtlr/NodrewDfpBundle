@@ -15,8 +15,7 @@ namespace Nodrew\Bundle\DfpBundle\Model;
 class AdUnit extends TargetContainer
 {
     protected $path;
-    protected $width;
-    protected $height;
+    protected $sizes;
     protected $divId;
     protected $targets = array();
 
@@ -26,11 +25,10 @@ class AdUnit extends TargetContainer
      * @param int $height
      * @param array $targets
      */
-    public function __construct($path, $width, $height, array $targets = array())
+    public function __construct($path, $sizes, array $targets = array())
     {
         $this->setPath($path);
-        $this->setWidth($width);
-        $this->setHeight($height);
+        $this->setSizes($sizes);
         $this->setTargets($targets);
         
         $this->buildDivId();
@@ -51,14 +49,89 @@ class AdUnit extends TargetContainer
      */
     public function __toString()
     {
+        $width  = $this->getLargestWidth();
+        $height = $this->getLargestHeight();
+
         return <<< RETURN
 
-<div id="{$this->divId}" style="width:{$this->width}px; height:{$this->height}px;">
+<div id="{$this->divId}" style="width:{$width}px; height:{$height}px;">
 <script type="text/javascript">
 googletag.cmd.push(function() { googletag.display('{$this->divId}'); });
 </script>
 </div>
 RETURN;
+    }
+    
+    /**
+     * Get the largest width in the sizes.
+     *
+     * @return int
+     */
+    public function getLargestWidth()
+    {
+        $largest = 0;
+        foreach ($this->sizes as $size) {
+            if ($size[0] > $largest) {
+                $largest = $size[0];
+            }
+        }
+        
+        return $largest;
+    }
+    
+    /**
+     * Get the largest height in the sizes.
+     *
+     * @return int
+     */
+    public function getLargestHeight()
+    {
+        $largest = 0;
+        foreach ($this->sizes as $size) {
+            if ($size[1] > $largest) {
+                $largest = $size[1];
+            }
+        }
+        
+        return $largest;
+    }
+    
+    /**
+     * Fix the given sizes, if possible, so that they will match the internal array needs.
+     *
+     * @throws Nodrew\Bundle\DfpBundle\Model\AdSizeException
+     * @param array $sizes
+     * @return array
+     */
+    protected function fixSizes(array $sizes)
+    {
+        if (count($sizes) == 0) {
+            throw new AdSizeException('The size cannot be an empty array. It should be given as an array with a width and height. ie: array(800,600).');
+        }
+
+        if ($this->checkSize($sizes)) {
+            return array($sizes);
+        }
+        
+        foreach ($sizes as $size) {
+            if (!$this->checkSize($size)) {
+                throw new AdSizeException(sprintf('Cannot take the size: %s as a parameter. A size should be an array giving a width and a height. ie: array(800,600).', printf($size, true)));
+            }
+        }
+        
+        return $sizes;
+    }
+    
+    /**
+     * Check that the given size has is an array with two numeric elements.
+     */
+    protected function checkSize($size)
+    {
+        if (is_array($size) && count($size) == 2 && isset($size[0]) && is_numeric($size[0]) && isset($size[1]) && is_numeric($size[1])) {
+            return true;
+        }
+        
+        return false;
     }
 
     /**
@@ -82,43 +155,24 @@ RETURN;
     }
 
     /**
-     * Get the width.
+     * Get the sizes.
      *
-     * @param string $width
+     * @throws Nodrew\Bundle\DfpBundle\Model\AdSizeException
+     * @param array $sizes
      */
-    public function setWidth($width)
+    public function setSizes($sizes)
     {
-        $this->width = $width;
+        $this->sizes = $this->fixSizes($sizes);
     }
 
     /**
-     * Get the width.
+     * Get the sizes.
      *
-     * @return string
+     * @return array
      */
-    public function getWidth()
+    public function getSizes()
     {
-        return $this->width;
-    }
-
-    /**
-     * Get the height.
-     *
-     * @param string $height
-     */
-    public function setHeight($height)
-    {
-        $this->height = $height;
-    }
-
-    /**
-     * Get the height.
-     *
-     * @return string
-     */
-    public function getHeight()
-    {
-        return $this->height;
+        return $this->sizes;
     }
 
     /**

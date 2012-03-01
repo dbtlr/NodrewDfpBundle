@@ -94,7 +94,45 @@ googletag.enableServices();
 </script>
 RESPONSE;
 
-        $this->collection->add($unit = new AdUnit('path/path', 300, 255));
+        $this->collection->add($unit = new AdUnit('path/path', array(300, 255)));
+        $unit->setDivId('divId');
+        $this->listener->onKernelResponse($this->event($content));
+
+        $this->assertSame($result, trim($this->response->getContent()));
+    }
+
+    /**
+     * @covers Nodrew\Bundle\DfpBundle\EventListener\ControlCodeListener::onKernelResponse
+     */
+    public function testResponseEventWillPrintMultipleSizes()
+    {
+        $content  = '<!-- NodrewDfpBundle Control Code -->';
+        $result   = <<< RESPONSE
+<script type="text/javascript">
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+(function() {
+var gads = document.createElement('script');
+gads.async = true;
+gads.type = 'text/javascript';
+var useSSL = 'https:' == document.location.protocol;
+gads.src = (useSSL ? 'https:' : 'http:') +
+'//www.googletagservices.com/tag/js/gpt.js';
+var node = document.getElementsByTagName('script')[0];
+node.parentNode.insertBefore(gads, node);
+})();
+</script>
+
+<script type="text/javascript">
+googletag.cmd.push(function() {
+googletag.defineSlot('/0000/path/path', [[300, 255], [400, 355]], 'divId').addService(googletag.pubads());
+googletag.pubads().enableSingleRequest();
+googletag.enableServices();
+});
+</script>
+RESPONSE;
+
+        $this->collection->add($unit = new AdUnit('path/path', array(array(300, 255),array(400, 355))));
         $unit->setDivId('divId');
         $this->listener->onKernelResponse($this->event($content));
 
@@ -148,9 +186,9 @@ googletag.enableServices();
 </script>
 RESPONSE;
 
-        $this->collection->add($unit1 = new AdUnit('path/path', 300, 255));
-        $this->collection->add($unit2 = new AdUnit('path/path2', 400, 355));
-        $this->collection->add($unit3 = new AdUnit('path/path3', 500, 455));
+        $this->collection->add($unit1 = new AdUnit('path/path', array(300, 255)));
+        $this->collection->add($unit2 = new AdUnit('path/path2', array(400, 355)));
+        $this->collection->add($unit3 = new AdUnit('path/path3', array(500, 455)));
         $unit1->setDivId('divId1');
         $unit2->setDivId('divId2');
         $unit3->setDivId('divId3');
@@ -192,7 +230,7 @@ googletag.target('SSS', ['blue']);
 </script>
 RESPONSE;
 
-        $this->collection->add($unit = new AdUnit('path/path', 300, 255));
+        $this->collection->add($unit = new AdUnit('path/path', array(300, 255)));
         $unit->setDivId('divId');
         $unit->addTarget('SSS', 'blue');
 
@@ -234,7 +272,7 @@ googletag.target('TTT', ['green']);
 </script>
 RESPONSE;
 
-        $this->collection->add($unit = new AdUnit('path/path', 300, 255));
+        $this->collection->add($unit = new AdUnit('path/path', array(300, 255)));
         $unit->setDivId('divId');
         $unit->addTarget('SSS', 'blue');
         $unit->addTarget('TTT', 'green');
@@ -276,7 +314,7 @@ googletag.target('SSS', ['blue']);
 </script>
 RESPONSE;
 
-        $this->collection->add($unit = new AdUnit('path/path', 300, 255));
+        $this->collection->add($unit = new AdUnit('path/path', array(300, 255)));
         $unit->setDivId('divId');
         $this->settings->addTarget('SSS', 'blue');
 
@@ -318,7 +356,7 @@ googletag.target('SSS', ['blue']);
 </script>
 RESPONSE;
 
-        $this->collection->add($unit = new AdUnit('path/path', 300, 255));
+        $this->collection->add($unit = new AdUnit('path/path', array(300, 255)));
         $unit->setDivId('divId');
         $this->settings->addTarget('SSS', 'blue');
         $unit->addTarget('TTT', 'green');
@@ -371,8 +409,8 @@ googletag.target('SSS', ['blue']);
 </script>
 RESPONSE;
 
-        $this->collection->add($unit1 = new AdUnit('path/path', 300, 255));
-        $this->collection->add($unit2 = new AdUnit('path/path2', 400, 355));
+        $this->collection->add($unit1 = new AdUnit('path/path', array(300, 255)));
+        $this->collection->add($unit2 = new AdUnit('path/path2', array(400, 355)));
         $unit1->setDivId('divId1');
         $unit2->setDivId('divId2');
 
@@ -417,7 +455,7 @@ googletag.target('SSS', ['blue','green']);
 </script>
 RESPONSE;
 
-        $this->collection->add($unit = new AdUnit('path/path', 300, 255));
+        $this->collection->add($unit = new AdUnit('path/path', array(300, 255)));
         $unit->setDivId('divId');
         $unit->addTarget('SSS', array('blue', 'green'));
 

@@ -29,7 +29,7 @@ class DfpExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'dfp_ad_unit' => new \Twig_Filter_Method($this, 'addAdUnit')
+            'dfp_ad_unit' => new \Twig_Filter_Method($this, 'addAdUnit', array('is_safe' => array('html')))
         );
     }
 
@@ -37,14 +37,13 @@ class DfpExtension extends \Twig_Extension
      * Create an ad unit and return the source
      *
      * @param string $path
-     * @param int $width
-     * @param int $height
+     * @param array $sizes
      * @param array $targets
      * @return Nodrew\Bundle\DfpBundle\Model\AdUnit
      */
-    public function addAdUnit($path, $width, $height, array $targets = array())
+    public function addAdUnit($path, array $sizes, array $targets = array())
     {
-        $unit = new AdUnit($path, $width, $height, $targets);
+        $unit = new AdUnit($path, $sizes, $targets);
 
         $this->collection->add($unit);
         

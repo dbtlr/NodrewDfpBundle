@@ -108,8 +108,7 @@ CONTROL;
     {
         $publisherId = $this->settings->getPublisherId();
         $targets     = $this->getTargetsBlock($unit->getTargets());
-        $width       = $unit->getWidth();
-        $height      = $unit->getHeight();
+        $sizes       = $this->printSizes($unit->getSizes());
         $divId       = $unit->getDivId();
         $path        = $unit->getPath();
 
@@ -117,13 +116,33 @@ CONTROL;
 
 <script type="text/javascript">
 googletag.cmd.push(function() {
-googletag.defineSlot('/{$publisherId}/{$path}', [{$width}, {$height}], '{$divId}').addService(googletag.pubads());
+googletag.defineSlot('/{$publisherId}/{$path}', {$sizes}, '{$divId}').addService(googletag.pubads());
 googletag.pubads().enableSingleRequest();
 googletag.enableServices();{$targets}
 });
 </script>
 
 BLOCK;
+    }
+    
+    /**
+     * Print the sizes array in it's json equivalent.
+     *
+     * @param array $sizes
+     * @return string
+     */
+    protected function printSizes(array $sizes)
+    {
+        if (count($sizes) == 1) {
+            return '['.$sizes[0][0].', '.$sizes[0][1].']';
+        }
+
+        $string = '';
+        foreach ($sizes as $size) {
+            $string .= '['.$size[0].', '.$size[1].'], ';
+        }
+        
+        return '['.trim($string, ', ').']';
     }
     
     /**

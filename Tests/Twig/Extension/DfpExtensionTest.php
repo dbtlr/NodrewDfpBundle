@@ -25,15 +25,13 @@ class DfpExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testWillCreateAdUnitAndReturnIt()
     {
-        $path   = 'test';
-        $width  = 200;
-        $height = 300;
-        $unit   = $this->extension->addAdUnit($path, $width, $height);
+        $path = 'test';
+        $size = array(200, 300);
+        $unit = $this->extension->addAdUnit($path, $size);
         
         $this->assertInstanceOf('Nodrew\Bundle\DfpBundle\Model\AdUnit', $unit);
         $this->assertEquals($path, $unit->getPath());
-        $this->assertEquals($width, $unit->getWidth());
-        $this->assertEquals($height, $unit->getHeight());
+        $this->assertEquals(array($size), $unit->getSizes());
     }
 
     /**
@@ -42,14 +40,12 @@ class DfpExtensionTest extends \PHPUnit_Framework_TestCase
     public function testWillCreateAdUnitAndAddItToCollection()
     {
         $path = 'test';
-        $width = 200;
-        $height = 300;
-        $this->extension->addAdUnit($path, $width, $height);
+        $size = array(200, 300);
+        $this->extension->addAdUnit($path, $size);
         
         $unit = $this->collection->first();
         $this->assertEquals($path, $unit->getPath());
-        $this->assertEquals($width, $unit->getWidth());
-        $this->assertEquals($height, $unit->getHeight());
+        $this->assertEquals(array($size), $unit->getSizes());
     }
 
     /**
@@ -58,29 +54,26 @@ class DfpExtensionTest extends \PHPUnit_Framework_TestCase
     public function testWillCreateMultipleAdUnitsAndAddThemToCollection()
     {
         $units = array(
-            array('path' => 'test', 'width' => 200, 'height' => 300),
-            array('path' => 'test2', 'width' => 300, 'height' => 400),
-            array('path' => 'test3', 'width' => 400, 'height' => 500),
+            array('path' => 'test', 'size' => array(200, 300)),
+            array('path' => 'test2', 'size' => array(300, 400)),
+            array('path' => 'test3', 'size' => array(400, 500)),
         );
         
         foreach ($units as $unit) {
-            $this->extension->addAdUnit($unit['path'], $unit['width'], $unit['height']);
+            $this->extension->addAdUnit($unit['path'], $unit['size']);
         }
         
         $unit = $this->collection->first();
         $this->assertEquals($units[0]['path'], $unit->getPath());
-        $this->assertEquals($units[0]['width'], $unit->getWidth());
-        $this->assertEquals($units[0]['height'], $unit->getHeight());
+        $this->assertEquals(array($units[0]['size']), $unit->getSizes());
         
         $unit = $this->collection->next();
         $this->assertEquals($units[1]['path'], $unit->getPath());
-        $this->assertEquals($units[1]['width'], $unit->getWidth());
-        $this->assertEquals($units[1]['height'], $unit->getHeight());
+        $this->assertEquals(array($units[1]['size']), $unit->getSizes());
         
         $unit = $this->collection->next();
         $this->assertEquals($units[2]['path'], $unit->getPath());
-        $this->assertEquals($units[2]['width'], $unit->getWidth());
-        $this->assertEquals($units[2]['height'], $unit->getHeight());
+        $this->assertEquals(array($units[2]['size']), $unit->getSizes());
     }
 
     /**
@@ -88,16 +81,14 @@ class DfpExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testWillCreateAdUnitWithTarget()
     {
-        $path = 'test';
-        $width = 200;
-        $height = 300;
+        $path    = 'test';
+        $size    = array(200, 300);
         $targets = array('blah' => 'blah');
-        $this->extension->addAdUnit($path, $width, $height, $targets);
+        $this->extension->addAdUnit($path, $size, $targets);
         
         $unit = $this->collection->first();
         $this->assertEquals($path, $unit->getPath());
-        $this->assertEquals($width, $unit->getWidth());
-        $this->assertEquals($height, $unit->getHeight());
+        $this->assertEquals(array($size), $unit->getSizes());
         $this->assertEquals($targets, $unit->getTargets());
     }
 
