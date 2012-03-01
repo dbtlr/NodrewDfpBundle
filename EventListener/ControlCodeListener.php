@@ -106,7 +106,7 @@ CONTROL;
      */
     protected function getAdControlBlock(AdUnit $unit)
     {
-        $publisherId = $this->settings->getPublisherId();
+        $publisherId = trim($this->settings->getPublisherId(), '/');
         $targets     = $this->getTargetsBlock($unit->getTargets());
         $sizes       = $this->printSizes($unit->getSizes());
         $divId       = $unit->getDivId();
