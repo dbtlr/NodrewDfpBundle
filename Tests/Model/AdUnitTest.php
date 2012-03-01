@@ -2,7 +2,8 @@
 
 namespace Nodrew\Bundle\DfpBundle\Tests\Model;
 
-use Nodrew\Bundle\DfpBundle\Model\AdUnit;
+use Nodrew\Bundle\DfpBundle\Model\AdUnit,
+    Nodrew\Bundle\DfpBundle\Model\Settings;
 
 class AdUnitTest extends \PHPUnit_Framework_TestCase
 {
@@ -91,7 +92,7 @@ class AdUnitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Nodrew\Bundle\DfpBundle\Model\AdUnit::__toString
+     * @covers Nodrew\Bundle\DfpBundle\Model\AdUnit::print
      */
     public function testWillBuildPrintProperly()
     {
@@ -100,13 +101,13 @@ class AdUnitTest extends \PHPUnit_Framework_TestCase
 
         $expected = <<< EXPECTED
 
-<div id="divId" style="width:300px; height:200px;">
+<div id="divId" class="class" style="width:300px; height:200px;">
 <script type="text/javascript">
 googletag.cmd.push(function() { googletag.display('divId'); });
 </script>
 </div>
 EXPECTED;
 
-        $this->assertSame($expected, $unit->__toString());
+        $this->assertSame($expected, $unit->output(new Settings('0000', 'class')));
     }
 }

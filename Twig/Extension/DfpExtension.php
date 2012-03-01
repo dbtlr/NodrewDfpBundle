@@ -39,7 +39,7 @@ class DfpExtension extends \Twig_Extension
      * @param string $path
      * @param array $sizes
      * @param array $targets
-     * @return Nodrew\Bundle\DfpBundle\Model\AdUnit
+     * @return string
      */
     public function addAdUnit($path, array $sizes, array $targets = array())
     {
@@ -47,7 +47,7 @@ class DfpExtension extends \Twig_Extension
 
         $this->collection->add($unit);
         
-        return $unit;
+        return $unit->output($this->settings);
     }
 
     /**

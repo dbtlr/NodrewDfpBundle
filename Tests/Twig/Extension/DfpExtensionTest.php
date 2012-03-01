@@ -23,20 +23,6 @@ class DfpExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Nodrew\Bundle\DfpBundle\Twig\Extension\DfpExtension::addAdUnit
      */
-    public function testWillCreateAdUnitAndReturnIt()
-    {
-        $path = 'test';
-        $size = array(200, 300);
-        $unit = $this->extension->addAdUnit($path, $size);
-        
-        $this->assertInstanceOf('Nodrew\Bundle\DfpBundle\Model\AdUnit', $unit);
-        $this->assertEquals($path, $unit->getPath());
-        $this->assertEquals(array($size), $unit->getSizes());
-    }
-
-    /**
-     * @covers Nodrew\Bundle\DfpBundle\Twig\Extension\DfpExtension::addAdUnit
-     */
     public function testWillCreateAdUnitAndAddItToCollection()
     {
         $path = 'test';

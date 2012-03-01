@@ -45,16 +45,18 @@ class AdUnit extends TargetContainer
     /**
      * Output the DFP code for this ad unit
      * 
+     * @param Nodrew\Bundle\DfpBundle\Model\Settings $settings
      * @return string
      */
-    public function __toString()
+    public function output(Settings $settings)
     {
         $width  = $this->getLargestWidth();
         $height = $this->getLargestHeight();
+        $class  = $settings->getDivClass();
 
         return <<< RETURN
 
-<div id="{$this->divId}" style="width:{$width}px; height:{$height}px;">
+<div id="{$this->divId}" class="{$class}" style="width:{$width}px; height:{$height}px;">
 <script type="text/javascript">
 googletag.cmd.push(function() { googletag.display('{$this->divId}'); });
 </script>
