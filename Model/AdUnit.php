@@ -21,11 +21,10 @@ class AdUnit extends TargetContainer
 
     /**
      * @param string $path
-     * @param int $width
-     * @param int $height
+     * @param array|null $sizes
      * @param array $targets
      */
-    public function __construct($path, $sizes=array(), array $targets = array())
+    public function __construct($path, $sizes=null, array $targets = array())
     {
         $this->setPath($path);
         $this->setSizes($sizes);

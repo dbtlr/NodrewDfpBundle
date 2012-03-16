@@ -104,6 +104,44 @@ RESPONSE;
     /**
      * @covers Nodrew\Bundle\DfpBundle\EventListener\ControlCodeListener::onKernelResponse
      */
+    public function testResponseEventWillLoadOutOfPageAdUnitFromCollection()
+    {
+        $content  = '<!-- NodrewDfpBundle Control Code -->';
+        $result   = <<< RESPONSE
+<script type="text/javascript">
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+(function() {
+var gads = document.createElement('script');
+gads.async = true;
+gads.type = 'text/javascript';
+var useSSL = 'https:' == document.location.protocol;
+gads.src = (useSSL ? 'https:' : 'http:') +
+'//www.googletagservices.com/tag/js/gpt.js';
+var node = document.getElementsByTagName('script')[0];
+node.parentNode.insertBefore(gads, node);
+})();
+</script>
+
+<script type="text/javascript">
+googletag.cmd.push(function() {
+googletag.defineOutOfPageSlot('/0000/path/path', 'divId').addService(googletag.pubads());
+googletag.pubads().enableSingleRequest();
+googletag.enableServices();
+});
+</script>
+RESPONSE;
+
+        $this->collection->add($unit = new AdUnit('path/path'));
+        $unit->setDivId('divId');
+        $this->listener->onKernelResponse($this->event($content));
+
+        $this->assertSame($result, trim($this->response->getContent()));
+    }
+
+    /**
+     * @covers Nodrew\Bundle\DfpBundle\EventListener\ControlCodeListener::onKernelResponse
+     */
     public function testResponseEventWillPrintMultipleSizes()
     {
         $content  = '<!-- NodrewDfpBundle Control Code -->';

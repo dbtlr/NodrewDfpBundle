@@ -63,7 +63,7 @@ class ControlCodeListener
             $controlCode .= $this->getMainControlCode();
             
             foreach ($this->collection as $unit) {
-                $controlCode .= $this->getAdControlBlock($unit);
+                $controlCode .= $unit->getSizes() === null ? $this->getOutOfPageAdControlBlock($unit) : $this->getAdControlBlock($unit);
             }
         }
 
@@ -117,6 +117,31 @@ CONTROL;
 <script type="text/javascript">
 googletag.cmd.push(function() {
 googletag.defineSlot('/{$publisherId}/{$path}', {$sizes}, '{$divId}').addService(googletag.pubads());
+googletag.pubads().enableSingleRequest();
+googletag.enableServices();{$targets}
+});
+</script>
+
+BLOCK;
+    }
+    
+    /**
+     * Get the control block for an individual ad.
+     *
+     * @return string
+     */
+    protected function getOutOfPageAdControlBlock(AdUnit $unit)
+    {
+        $publisherId = trim($this->settings->getPublisherId(), '/');
+        $targets     = $this->getTargetsBlock($unit->getTargets());
+        $divId       = $unit->getDivId();
+        $path        = $unit->getPath();
+
+        return <<< BLOCK
+
+<script type="text/javascript">
+googletag.cmd.push(function() {
+googletag.defineOutOfPageSlot('/{$publisherId}/{$path}', '{$divId}').addService(googletag.pubads());
 googletag.pubads().enableSingleRequest();
 googletag.enableServices();{$targets}
 });
