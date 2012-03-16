@@ -1,8 +1,6 @@
 Google DFP Bundle for Symfony2 [![Travis-CI Build Status](https://secure.travis-ci.org/nodrew/NodrewDfpBundle.png?branch=master)](http://travis-ci.org/#!/nodrew/NodrewDfpBundle)
 =================================================================================================================================================================================
 
-# This Bundle is UNDER DEVELOPMENT. DO NOT USE YET.
-
 ## Installation Instructions
 
 1. Download NodrewDfpBundle
@@ -91,3 +89,24 @@ This placeholder comment needs to be added to the head of your layout. It is aut
 </head>
 ```
 
+## Using Ad Units
+
+### In page unit.
+
+To use a standard in page ad unit, add the following to your template:
+
+``` html
+{{ dfp_ad_unit('some/campaign', [300, 250]) }}
+```
+
+The appropriate control codes will be added to the header, if everything was done correctly during setup.
+
+### Out of page unit.
+
+If you're looking to do a DFP out of page unit, such as an interstitial, or a skin, then use this code. It is much similar, just without the size attached to it.
+
+``` html
+{{ dfp_oop_ad_unit('some/campaign') }}
+```
+
+The appropriate control codes will be added to the header, if everything was done correctly during setup.
