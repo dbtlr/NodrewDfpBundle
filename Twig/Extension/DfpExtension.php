@@ -51,6 +51,22 @@ class DfpExtension extends \Twig_Extension
     }
 
     /**
+     * Create an out of page ad unit and return the source
+     *
+     * @param string $path
+     * @param array $targets
+     * @return string
+     */
+    public function addOutOfPageAdUnit($path, array $targets = array())
+    {
+        $unit = new AdUnit($path, null, $targets);
+
+        $this->collection->add($unit);
+        
+        return $unit->output($this->settings);
+    }
+
+    /**
      * @return string
      */
     public function getName()

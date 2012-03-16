@@ -35,6 +35,19 @@ class DfpExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Nodrew\Bundle\DfpBundle\Twig\Extension\DfpExtension::addOutOfPageAdUnit
+     */
+    public function testWillCreateOutOfPageAdUnitAndAddItToCollection()
+    {
+        $path = 'test';
+        $this->extension->addOutOfPageAdUnit($path);
+        
+        $unit = $this->collection->first();
+        $this->assertEquals($path, $unit->getPath());
+        $this->assertEquals(null, $unit->getSizes());
+    }
+
+    /**
      * @covers Nodrew\Bundle\DfpBundle\Twig\Extension\DfpExtension::addAdUnit
      */
     public function testWillCreateMultipleAdUnitsAndAddThemToCollection()

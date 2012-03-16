@@ -29,10 +29,10 @@ class AdUnit extends TargetContainer
         $this->setPath($path);
         $this->setSizes($sizes);
         $this->setTargets($targets);
-        
+
         $this->buildDivId();
     }
-    
+
     /**
      * Build the divId.
      */
@@ -40,10 +40,10 @@ class AdUnit extends TargetContainer
     {
         $this->divId = 'dfp-'.spl_object_hash($this);
     }
-    
+
     /**
      * Output the DFP code for this ad unit
-     * 
+     *
      * @param Nodrew\Bundle\DfpBundle\Model\Settings $settings
      * @return string
      */
@@ -62,7 +62,7 @@ googletag.cmd.push(function() { googletag.display('{$this->divId}'); });
 </div>
 RETURN;
     }
-    
+
     /**
      * Get the largest width in the sizes.
      *
@@ -70,16 +70,20 @@ RETURN;
      */
     public function getLargestWidth()
     {
+        if ($this->sizes === null) {
+            return 0;
+        }
+
         $largest = 0;
         foreach ($this->sizes as $size) {
             if ($size[0] > $largest) {
                 $largest = $size[0];
             }
         }
-        
+
         return $largest;
     }
-    
+
     /**
      * Get the largest height in the sizes.
      *
@@ -87,16 +91,20 @@ RETURN;
      */
     public function getLargestHeight()
     {
+        if ($this->sizes === null) {
+            return 0;
+        }
+
         $largest = 0;
         foreach ($this->sizes as $size) {
             if ($size[1] > $largest) {
                 $largest = $size[1];
             }
         }
-        
+
         return $largest;
     }
-    
+
     /**
      * Fix the given sizes, if possible, so that they will match the internal array needs.
      *
@@ -109,7 +117,7 @@ RETURN;
         if ($sizes === null) {
             return;
         }
-        
+
         if (count($sizes) == 0) {
             throw new AdSizeException('The size cannot be an empty array. It should be given as an array with a width and height. ie: array(800,600).');
         }
@@ -117,16 +125,16 @@ RETURN;
         if ($this->checkSize($sizes)) {
             return array($sizes);
         }
-        
+
         foreach ($sizes as $size) {
             if (!$this->checkSize($size)) {
                 throw new AdSizeException(sprintf('Cannot take the size: %s as a parameter. A size should be an array giving a width and a height. ie: array(800,600).', printf($size, true)));
             }
         }
-        
+
         return $sizes;
     }
-    
+
     /**
      * Check that the given size has is an array with two numeric elements.
      */
@@ -135,7 +143,7 @@ RETURN;
         if (is_array($size) && count($size) == 2 && isset($size[0]) && is_numeric($size[0]) && isset($size[1]) && is_numeric($size[1])) {
             return true;
         }
-        
+
         return false;
     }
 
