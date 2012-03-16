@@ -49,18 +49,29 @@ class AdUnit extends TargetContainer
      */
     public function output(Settings $settings)
     {
-        $width  = $this->getLargestWidth();
-        $height = $this->getLargestHeight();
         $class  = $settings->getDivClass();
-
+        $style  = $this->getStyles();
+        
         return <<< RETURN
 
-<div id="{$this->divId}" class="{$class}" style="width:{$width}px; height:{$height}px;">
+<div id="{$this->divId}" class="{$class}" style="$style">
 <script type="text/javascript">
 googletag.cmd.push(function() { googletag.display('{$this->divId}'); });
 </script>
 </div>
 RETURN;
+    }
+    
+    protected function getStyles()
+    {
+        if ($this->getSizes() == null) {
+            return 'width: 0; height: 0; position: absolute; bottom: 0;';
+        }
+        
+        $width  = $this->getLargestWidth();
+        $height = $this->getLargestHeight();
+        
+        return "width:{$width}px; height:{$height}px;"; 
     }
 
     /**
