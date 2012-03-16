@@ -47,6 +47,15 @@ class AdUnitTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
+     * @covers Nodrew\Bundle\DfpBundle\Model\AdUnit::setSizes
+     */
+    public function testWillAcceptAdUnitWithNullSize()
+    {
+        $unit = new AdUnit('path', null);
+        $this->assertSame(null, $unit->getSizes());
+    }
+    
+    /**
      * @expectedException Nodrew\Bundle\DfpBundle\Model\AdSizeException
      * @covers Nodrew\Bundle\DfpBundle\Model\AdUnit::setSizes
      */

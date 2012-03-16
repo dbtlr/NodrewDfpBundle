@@ -25,7 +25,7 @@ class AdUnit extends TargetContainer
      * @param int $height
      * @param array $targets
      */
-    public function __construct($path, $sizes, array $targets = array())
+    public function __construct($path, $sizes=array(), array $targets = array())
     {
         $this->setPath($path);
         $this->setSizes($sizes);
@@ -102,11 +102,15 @@ RETURN;
      * Fix the given sizes, if possible, so that they will match the internal array needs.
      *
      * @throws Nodrew\Bundle\DfpBundle\Model\AdSizeException
-     * @param array $sizes
-     * @return array
+     * @param array|null$sizes
+     * @return array|null
      */
-    protected function fixSizes(array $sizes)
+    protected function fixSizes($sizes)
     {
+        if ($sizes === null) {
+            return;
+        }
+        
         if (count($sizes) == 0) {
             throw new AdSizeException('The size cannot be an empty array. It should be given as an array with a width and height. ie: array(800,600).');
         }
