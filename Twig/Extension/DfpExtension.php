@@ -29,7 +29,7 @@ class DfpExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'dfp_ad_unit'     => new \Twig_Filter_Method($this, 'addAdUnit', array('is_safe' => array('html')))
+            'dfp_ad_unit'     => new \Twig_Filter_Method($this, 'addAdUnit', array('is_safe' => array('html'))),
             'dfp_oop_ad_unit' => new \Twig_Filter_Method($this, 'addOutOfPageAdUnit', array('is_safe' => array('html')))
         );
     }
