@@ -1,0 +1,31 @@
+
+{
+    "name": "dbtlr/dfp-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony2 Bundle for integrating with the Google DFP Ad Network.",
+    "keywords": ["dfp", "advertising", "google"],
+    "homepage": "https://github.com/dbtlr/NodrewDfpBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Drew Butler",
+            "email": "hi@dbtlr.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/dbtlr/NodrewDfpBundle/issues"
+    },
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/symfony": ">=2.0,<2.4-dev"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
+    "autoload": {
+        "psr-0": { "Nodrew\\Bundle\\DfpBundle": "" }
+    },
+    "target-dir": "Nodrew/Bundle/DfpBundle"
+}
