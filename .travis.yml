@@ -13,4 +13,4 @@ before_script: php vendor/vendors.php
 
 notifications:
   email:
-    - support@nodrew.com
+    - support@dbtlr.com

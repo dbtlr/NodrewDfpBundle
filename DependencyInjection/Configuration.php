@@ -12,8 +12,8 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  * This is the class that validates and merges configuration from your app/config files
  *
  * @package     NodrewDfpBundle
- * @author      Drew Butler <hi@nodrew.com>
- * @copyright	(c) 2012 Drew Butler
+ * @author      Drew Butler <hi@dbtlr.com>
+ * @copyright   (c) 2012 Drew Butler
  * @license     http://www.opensource.org/licenses/mit-license.php
  */
 class Configuration

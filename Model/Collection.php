@@ -31,8 +31,8 @@ use Countable, IteratorAggregate, ArrayAccess, Closure, ArrayIterator;
  * @author      Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author      Jonathan Wage <jonwage@gmail.com>
  * @author      Roman Borschel <roman@code-factory.org>
- * @author      Drew Butler <hi@nodrew.com>
- * @copyright	(c) 2012 Drew Butler
+ * @author      Drew Butler <hi@dbtlr.com>
+ * @copyright   (c) 2012 Drew Butler
  * @license     http://www.opensource.org/licenses/mit-license.php
  */
 class Collection implements Countable, IteratorAggregate, ArrayAccess

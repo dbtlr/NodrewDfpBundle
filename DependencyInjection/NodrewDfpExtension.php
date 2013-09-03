@@ -21,8 +21,8 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  *
  * @package     NodrewDfpBundle
- * @author      Drew Butler <hi@nodrew.com>
- * @copyright	(c) 2012 Drew Butler
+ * @author      Drew Butler <hi@dbtlr.com>
+ * @copyright   (c) 2012 Drew Butler
  * @license     http://www.opensource.org/licenses/mit-license.php
  */
 class NodrewDfpExtension extends Extension
@@ -80,6 +80,6 @@ class NodrewDfpExtension extends Extension
      */
     public function getNamespace()
     {
-        return 'http://www.nodrew.com/schema/dic/dfp_bundle';
+        return 'http://www.dbtlr.com/schema/dic/dfp_bundle';
     }
 }

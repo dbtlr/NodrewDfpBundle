@@ -14,8 +14,8 @@ use Nodrew\Bundle\DfpBundle\Model\Collection,
 
 /**
  * @package     NodrewDfpBundle
- * @author      Drew Butler <hi@nodrew.com>
- * @copyright	(c) 2012 Drew Butler
+ * @author      Drew Butler <hi@dbtlr.com>
+ * @copyright   (c) 2012 Drew Butler
  * @license     http://www.opensource.org/licenses/mit-license.php
  */
 class ControlCodeListener
