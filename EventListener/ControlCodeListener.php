@@ -178,35 +178,32 @@ BLOCK;
     protected function getTargetsBlock(array $targets)
     {
         $block = '';
-        
+
         foreach ($this->settings->getTargets() as $name => $target) {
             if (!array_key_exists($name, $targets)) {
                 $targets[$name] = $target;
             }
         }
-        
-        
+
         foreach ($targets as $name => $target) {
             if ($target === null || $target === '') {
                 continue;
             }
-            
+
             if (is_array($target)) {
                 $values = array_values($target);
-                $target = '';
-                foreach ($values as $value) {
-                    $target .= "'$value',";
+
+                foreach ($values as &$value) {
+                    $value = "'$value'";
                 }
-                
-                $target = trim($target, ',');
+                $tgt = "[". implode(",", $values) ."]";
 
             } else {
-                $target = "'$target'";
+                $tgt = "'$target'";
             }
 
-            $block .= "\ngoogletag.target('$name', [$target]);";
+            $block .= "\ngoogletag.setTargeting('$name', $tgt);";
         }
-
         return $block;
     }
 }
